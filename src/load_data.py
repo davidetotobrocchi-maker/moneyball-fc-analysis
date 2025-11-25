@@ -1,29 +1,20 @@
 import json
 import requests
 from pathlib import Path
-
-# === CONFIGURAZIONE ===
 MATCHES_FILE = "data/matches/27.json"
 BASE_URL = "https://raw.githubusercontent.com/statsbomb/open-data/master/data"
-
-# Directory locali
 DIR_EVENTS = Path("data/events")
 DIR_LINEUPS = Path("data/lineups")
-
 DIR_EVENTS.mkdir(parents=True, exist_ok=True)
 DIR_LINEUPS.mkdir(parents=True, exist_ok=True)
 
-# === 1. Carica il file matches ===
 with open(MATCHES_FILE, "r", encoding="utf-8") as f:
     matches = json.load(f)
-
+    
 match_ids = [m["match_id"] for m in matches]
 print(f"Trovati {len(match_ids)} match_id.")
 
-# === 2. Funzione per scaricare file ===
 def download_file(category: str, match_id: int):
-
-    # Mappa categorie → cartelle locali e remote
     remote_dirs = {
         "events": "events",
         "lineups": "lineups"
@@ -39,7 +30,6 @@ def download_file(category: str, match_id: int):
 
     out_file = local_dir / f"{match_id}.json"
 
-    # Skip se già esiste
     if out_file.exists():
         print(f"[SKIP] {category}/{match_id}.json già presente.")
         return
@@ -57,8 +47,6 @@ def download_file(category: str, match_id: int):
     else:
         print(f"[ERRORE] {category}/{match_id}.json non trovato ({r.status_code})")
 
-
-# === 3. Scarica events + lineups per ogni match ===
 for mid in match_ids:
     download_file("events", mid)
     download_file("lineups", mid)
