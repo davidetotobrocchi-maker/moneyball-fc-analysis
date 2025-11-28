@@ -4,34 +4,36 @@ from pathlib import Path
 
 def plot_top10_gax(csv_path="data/player_gax_ranking.csv"):
 
+    # Carico la classifica già preparata
     df = pd.read_csv(csv_path)
 
+    # Prendo i primi 10 per GAx
     top10 = df.sort_values("gax", ascending=False).head(10)
 
+    # Etichetta: Nome + numero gol tra parentesi
     top10["label"] = top10.apply(
-        lambda row: f"{row['player.name']} ({int(row['goals'])})", axis=1
+        lambda r: f"{r['player.name']} ({int(r['goals'])})", axis=1
     )
 
-    colors = plt.cm.tab10(range(10))
+    # Colori diversi giusto per renderlo più leggibile
+    colors = plt.cm.tab10(range(len(top10)))
 
     plt.figure(figsize=(12, 6))
     plt.bar(top10["label"], top10["gax"], color=colors)
 
-    plt.title("Top 10 Giocatori per Goals Above Expectation (GAx)", fontsize=14)
-    plt.xlabel("Giocatore (Gol)", fontsize=12)
-    plt.ylabel("GAx (Goals Above Expectation)", fontsize=12)
+    plt.title("Top 10 giocatori per Goals Above Expectation (GAx)")
+    plt.xlabel("Giocatore (Gol)")
+    plt.ylabel("GAx")
 
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
 
-    # CREA CARTELLA plots/ SE NON ESISTE
+    # Creo la cartella plots se non c’è già
     Path("plots").mkdir(exist_ok=True)
+    out_path = "plots/top10_gax.png"
 
-    # SALVA L’IMMAGINE
-    output_path = "plots/top10_gax.png"
-    plt.savefig(output_path, dpi=300)
-
-    print(f"Grafico salvato in: {output_path}")
+    plt.savefig(out_path, dpi=300)
+    print("Grafico salvato in:", out_path)
 
     plt.show()
 

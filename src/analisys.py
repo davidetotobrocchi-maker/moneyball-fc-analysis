@@ -4,20 +4,29 @@ from pathlib import Path
 SHOTS_FILE = Path("data/shots_clean.csv")
 
 def main():
+    # Carico il dataset dei tiri pulito
     df = pd.read_csv(SHOTS_FILE)
-    grouped = df.groupby("player.name").agg(
+
+    # Raggruppo per giocatore e calcolo le metriche principali
+    stats = df.groupby("player.name").agg(
         shots=("player.name", "count"),
         goals=("is_goal", "sum"),
         xg=("shot.statsbomb_xg", "sum")
     ).reset_index()
 
-    grouped["conversion_rate"] = grouped["goals"] / grouped["shots"]
-    grouped["gax"] = grouped["goals"] - grouped["xg"]
+    # Conversion rate e Goals Above Expectation
+    stats["conversion_rate"] = stats["goals"] / stats["shots"]
+    stats["gax"] = stats["goals"] - stats["xg"]
 
-    ranking = grouped.sort_values("gax", ascending=False)
-    ranking.to_csv("data/player_gax_ranking.csv", index=False)
+    # Ordino per GAx decrescente
+    ranking = stats.sort_values("gax", ascending=False)
 
-    print("Analisi completata. File salvato in data/player_gax_ranking.csv")
+    # Salvo la classifica finale
+    output_path = Path("data/player_gax_ranking.csv")
+    ranking.to_csv(output_path, index=False)
+
+    print("Analysis completed. Saved:", output_path)
+    print("\nTop 10 players by GAx:")
     print(ranking.head(10))
 
 if __name__ == "__main__":
