@@ -19,25 +19,30 @@ gax = pd.read_csv(GAX_FILE)
 # -------------------------
 st.header("Top 10 Players – Goals Above Expectation (GAx)")
 
-st.image("plots/top10_gax.png", caption="Top 10 GAx – Overall Finishing Efficiency", use_container_width=True)
+st.image(
+    "plots/top10_gax.png",
+    caption="Top 10 GAx – Overall Finishing Efficiency"
+)
 
 # -------------------------
 # Section 2 – CF Header Goals vs xG vs GAx
 # -------------------------
 st.header("Center Forwards – Header Goals vs xG vs GAx")
 
-st.image("plots/cf_header_goals_xg_gax.png",
-         caption="CF Header Goals vs Header xG vs Header GAx",
-         use_container_width=True)
+st.image(
+    "plots/cf_header_goals_xg_gax.png",
+    caption="CF Header Goals vs Header xG vs Header GAx"
+)
 
 # -------------------------
 # Section 3 – CF Top 10 Header Scorers (Scatter)
 # -------------------------
 st.header("Top 10 CF – Header Conversion Rate")
 
-st.image("plots/top10_header_scorers_cf_scatter.png",
-         caption="Conversion Rate vs Attempts (Top 10 CF Header Scorers)",
-         use_container_width=True)
+st.image(
+    "plots/top10_header_scorers_cf_scatter.png",
+    caption="Conversion Rate vs Attempts (Top 10 CF Header Scorers)"
+)
 
 # -------------------------
 # Section 4 – Explore Player
